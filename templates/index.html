@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Reservation Prediction</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Your stylesheet — must be in the same folder as this HTML file -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+    <div class="card">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="header-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <h2>Reservation prediction</h2>
+            </div>
+            <p>Fill in the booking details below to predict whether a reservation will be cancelled.</p>
+        </div>
+
+        <form action="" method="POST">
+
+            <!-- Booking Details -->
+            <p class="section-label">Booking details</p>
+            <div class="grid">
+
+                <div class="field-group">
+                    <label for="lead_time">Lead time <span>(days)</span></label>
+                    <input type="number" name="lead_time" id="lead_time" placeholder="e.g. 30" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="avg_price_per_room">Avg. price per room <span>(€)</span></label>
+                    <input type="number" name="avg_price_per_room" id="avg_price_per_room" placeholder="e.g. 120" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="no_of_week_nights">Week nights</label>
+                    <input type="number" name="no_of_week_nights" id="no_of_week_nights" placeholder="0" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="no_of_weekend_nights">Weekend nights</label>
+                    <input type="number" name="no_of_weekend_nights" id="no_of_weekend_nights" placeholder="0" required>
+                </div>
+
+                <div class="field-group col-full">
+                    <label for="no_of_special_request">Special requests</label>
+                    <input type="number" name="no_of_special_request" id="no_of_special_request" placeholder="0" required>
+                </div>
+
+            </div>
+
+            <!-- Arrival -->
+            <p class="section-label">Arrival</p>
+            <div class="grid">
+
+                <div class="field-group">
+                    <label for="arrival_month">Month</label>
+                    <select name="arrival_month" id="arrival_month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="arrival_date">Day</label>
+                    <select name="arrival_date" id="arrival_date" required>
+                        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                        <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                        <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+                        <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+                        <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                        <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+                        <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Room & Preferences -->
+            <p class="section-label">Room & preferences</p>
+            <div class="grid last">
+
+                <div class="field-group">
+                    <label for="room_type_reserved">Room type</label>
+                    <select name="room_type_reserved" id="room_type_reserved">
+                        <option value="0">Room type 1</option>
+                        <option value="1">Room type 2</option>
+                        <option value="2">Room type 3</option>
+                        <option value="3">Room type 4</option>
+                        <option value="4">Room type 5</option>
+                        <option value="5">Room type 6</option>
+                        <option value="6">Room type 7</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="type_of_meal_plan">Meal plan</label>
+                    <select name="type_of_meal_plan" id="type_of_meal_plan">
+                        <option value="0">Meal plan 1</option>
+                        <option value="1">Meal plan 2</option>
+                        <option value="2">Meal plan 3</option>
+                        <option value="3">Not selected</option>
+                    </select>
+                </div>
+
+                <div class="field-group col-full">
+                    <label for="market_segment_type">Market segment</label>
+                    <select name="market_segment_type" id="market_segment_type">
+                        <option value="0">Aviation</option>
+                        <option value="1">Complementary</option>
+                        <option value="2">Corporate</option>
+                        <option value="3">Offline</option>
+                        <option value="4">Online</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="submit-btn">Predict cancellation</button>
+
+        </form>
+
+        <!-- Result — Jinja block preserved -->
+        {% if prediction is not none %}
+        <div class="result {% if prediction == 0 %}cancelled{% elif prediction == 1 %}confirmed{% endif %}">
+            {% if prediction == 0 %}
+            <i class="fas fa-circle-xmark"></i>
+            <div>
+                <p class="result-title">Likely to cancel</p>
+                <p class="result-body">This customer is likely to cancel their reservation.</p>
+            </div>
+            {% elif prediction == 1 %}
+            <i class="fas fa-circle-check"></i>
+            <div>
+                <p class="result-title">Reservation confirmed</p>
+                <p class="result-body">This customer is not going to cancel their reservation.</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
