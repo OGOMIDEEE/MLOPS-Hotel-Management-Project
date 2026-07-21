@@ -1,5 +1,5 @@
 # This file creates a custom exception class to show better error messages.
-
+import traceback
 import sys
 
 
@@ -16,7 +16,7 @@ class CustomException(Exception):
     @staticmethod
     def get_detailed_error_messages(error_message, error_detail: sys):
         # Get the exception information from the error details.
-        _, exc_value, exc_tb = error_detail.exc_info()
+        _, exc_value, exc_tb = traceback.sys.exc_info()
 
         # Find the file where the error happened.
         file_name = exc_tb.tb_frame.f_code.co_filename
