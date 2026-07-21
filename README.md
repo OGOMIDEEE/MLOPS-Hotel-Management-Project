@@ -28,7 +28,8 @@ An end-to-end MLOps project that predicts whether a hotel reservation will be ca
 ├── notebook/                 # Exploratory analysis
 ├── static/ & templates/      # Flask frontend assets
 ├── artifacts/                # Generated data/model artifacts (raw, processed, models)
-
+└── custom_jenkins/
+    └── Dockerfile            # Jenkins server image with Docker CLI/engine for CI/CD
 ```
 
 ## Getting Started
@@ -74,10 +75,38 @@ Then open `http://localhost:5000` in your browser, fill in the reservation detai
 
 Pipeline behavior (bucket name, train/test ratio, categorical/numerical columns, etc.) is controlled via [config/config.yaml](config/config.yaml). Model hyperparameters and search space live in [config/model_params.py](config/model_params.py).
 
+## CI/CD (Jenkins)
+
+[custom_jenkins/Dockerfile](custom_jenkins/Dockerfile) builds a Jenkins server with the Docker CLI/engine installed, so pipeline jobs can run `docker` commands directly (e.g. build/push the app image).
+
+Build the image:
+
+```bash
+cd custom_jenkins
+docker build -t jenkins-dind .
+```
+
+Run it, mounting the host's Docker socket so Jenkins can talk to your local Docker engine, plus a named volume so Jenkins config/jobs persist:
+
+```bash
+docker run -d --name jenkins-dind \
+  -p 8080:8080 -p 50000:50000 \
+  -v //var/run/docker.sock:/var/run/docker.sock \
+  -v jenkins_home:/var/jenkins_home \
+  jenkins-dind
+```
+
+Get the initial admin password and finish setup at `http://localhost:8080`:
+
+```bash
+docker exec -it jenkins-dind cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
 ## Tech Stack
 
 - **ML**: scikit-learn, LightGBM, imbalanced-learn
 - **Experiment tracking**: MLflow
 - **Data**: pandas, numpy, Google Cloud Storage
 - **Web**: Flask
+- **CI/CD**: Jenkins, Docker
 
